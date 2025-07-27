@@ -17,6 +17,7 @@ import ProfessionalCalendarScreen from './components/ProfessionalCalendarScreen'
 import MyAppointmentsScreen from './components/MyAppointmentsScreen';
 import MyProfileScreen from './components/MyProfileScreen';
 import AdminRouter from './routes/AdminRouter';
+import SuperAdminRouter from './routes/SuperAdminRouter';
 import Login from './components/Login';
 import MainNavbar from './components/MainNavbar';
 
@@ -25,6 +26,7 @@ export default function App() {
     <AuthProvider>
       <Router>
         <Routes>
+          <Route path="/super/*" element={<SuperAdminRouter />} />
           <Route
             path="/:tenant/*"
             element={
