@@ -36,7 +36,7 @@ export default function MyProfileScreen() {
       await updateDoc(doc(db, 'users', user.uid), {
         firstName: firstName.trim(),
         lastName: lastName.trim(),
-        phone: `${phoneCode}${phoneArea}${phoneNumber.trim()}`,
+        phone: `${phoneCode}${phoneNumber.trim()}`,
       });
       alert('Datos actualizados');
     } catch (err) {
