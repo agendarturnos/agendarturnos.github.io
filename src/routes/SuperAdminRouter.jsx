@@ -1,13 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  collection,
-  onSnapshot,
-  doc,
-  setDoc,
-  updateDoc,
-  deleteDoc,
-  addDoc
-} from 'firebase/firestore';
+import { collection, onSnapshot, doc, setDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
 import { useAuth } from '../AuthProvider';
 import { Navigate } from 'react-router-dom';
@@ -20,8 +12,6 @@ export default function SuperAdminRouter() {
   const [newTenant, setNewTenant] = useState({ slug: '', companyId: '', projectName: '' });
   const [search, setSearch] = useState('');
   const [editUser, setEditUser] = useState(null);
-  const [payments, setPayments] = useState([]);
-  const [newPayment, setNewPayment] = useState({ companyId: '', amount: '', paidAt: '' });
 
   useEffect(() => {
     const unsub = onSnapshot(collection(db, 'tenants'), snap =>
@@ -33,13 +23,6 @@ export default function SuperAdminRouter() {
   useEffect(() => {
     const unsub = onSnapshot(collection(db, 'users'), snap =>
       setUsers(snap.docs.map(d => ({ id: d.id, ...d.data() })))
-    );
-    return unsub;
-  }, []);
-
-  useEffect(() => {
-    const unsub = onSnapshot(collection(db, 'payments'), snap =>
-      setPayments(snap.docs.map(d => ({ id: d.id, ...d.data() })))
     );
     return unsub;
   }, []);
@@ -84,22 +67,6 @@ export default function SuperAdminRouter() {
     setEditUser(null);
   };
 
-  const addPayment = async () => {
-    if (!newPayment.companyId || !newPayment.amount || !newPayment.paidAt) return;
-    await addDoc(collection(db, 'payments'), {
-      companyId: newPayment.companyId.trim(),
-      amount: parseFloat(newPayment.amount),
-      paidAt: new Date(newPayment.paidAt)
-    });
-    setNewPayment({ companyId: '', amount: '', paidAt: '' });
-  };
-
-  const deletePayment = async id => {
-    if (window.confirm('¿Eliminar pago?')) {
-      await deleteDoc(doc(db, 'payments', id));
-    }
-  };
-
   const filteredUsers = users.filter(u =>
     u.email?.toLowerCase().includes(search.toLowerCase()) ||
     `${u.firstName} ${u.lastName}`.toLowerCase().includes(search.toLowerCase())
@@ -119,12 +86,6 @@ export default function SuperAdminRouter() {
           className={`px-4 py-2 rounded ${tab === 'users' ? 'bg-[#f1bc8a] text-white' : 'bg-gray-200'}`}
         >
           Permisos
-        </button>
-        <button
-          onClick={() => setTab('payments')}
-          className={`px-4 py-2 rounded ${tab === 'payments' ? 'bg-[#f1bc8a] text-white' : 'bg-gray-200'}`}
-        >
-          Pagos
         </button>
       </div>
 
@@ -236,55 +197,6 @@ export default function SuperAdminRouter() {
               </div>
             </div>
           )}
-        </div>
-      )}
-
-      {tab === 'payments' && (
-        <div className="space-y-4">
-          <div className="flex space-x-2">
-            <input
-              className="border p-2 rounded"
-              placeholder="companyId"
-              value={newPayment.companyId}
-              onChange={e => setNewPayment({ ...newPayment, companyId: e.target.value })}
-            />
-            <input
-              type="number"
-              className="border p-2 rounded"
-              placeholder="Monto"
-              value={newPayment.amount}
-              onChange={e => setNewPayment({ ...newPayment, amount: e.target.value })}
-            />
-            <input
-              type="date"
-              className="border p-2 rounded"
-              value={newPayment.paidAt}
-              onChange={e => setNewPayment({ ...newPayment, paidAt: e.target.value })}
-            />
-            <button onClick={addPayment} className="px-3 py-2 bg-blue-500 text-white rounded">Agregar</button>
-          </div>
-          <table className="w-full border">
-            <thead>
-              <tr className="bg-gray-100">
-                <th className="border p-1">companyId</th>
-                <th className="border p-1">Monto</th>
-                <th className="border p-1">Fecha</th>
-                <th className="border p-1">Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {payments.map(p => (
-                <tr key={p.id}>
-                  <td className="border p-1">{p.companyId}</td>
-                  <td className="border p-1">{p.amount}</td>
-                  <td className="border p-1">{p.paidAt ? new Date(p.paidAt.seconds ? p.paidAt.seconds * 1000 : p.paidAt).toLocaleDateString() : ''}</td>
-                  <td className="border p-1">
-                    <button onClick={() => deletePayment(p.id)} className="px-2 py-1 bg-red-500 text-white rounded">Eliminar</button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
         </div>
       )}
     </div>
