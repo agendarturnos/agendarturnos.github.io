@@ -21,7 +21,8 @@ export default function SuperAdminRouter() {
   const [search, setSearch] = useState('');
   const [editUser, setEditUser] = useState(null);
   const [payments, setPayments] = useState([]);
-  const [newPayment, setNewPayment] = useState({ companyId: '', amount: '', paidAt: '' });
+  const [newPayment, setNewPayment] = useState({ companyId: '', amount: '', paidAt: '', transferCode: '' });
+  const [paymentSearch, setPaymentSearch] = useState('');
 
   useEffect(() => {
     const unsub = onSnapshot(collection(db, 'tenants'), snap =>
@@ -89,9 +90,10 @@ export default function SuperAdminRouter() {
     await addDoc(collection(db, 'payments'), {
       companyId: newPayment.companyId.trim(),
       amount: parseFloat(newPayment.amount),
-      paidAt: new Date(newPayment.paidAt)
+      paidAt: new Date(newPayment.paidAt),
+      transferCode: newPayment.transferCode.trim()
     });
-    setNewPayment({ companyId: '', amount: '', paidAt: '' });
+    setNewPayment({ companyId: '', amount: '', paidAt: '', transferCode: '' });
   };
 
   const deletePayment = async id => {
@@ -103,6 +105,10 @@ export default function SuperAdminRouter() {
   const filteredUsers = users.filter(u =>
     u.email?.toLowerCase().includes(search.toLowerCase()) ||
     `${u.firstName} ${u.lastName}`.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const filteredPayments = payments.filter(p =>
+    p.companyId?.toLowerCase().includes(paymentSearch.toLowerCase())
   );
 
   return (
@@ -241,6 +247,12 @@ export default function SuperAdminRouter() {
 
       {tab === 'payments' && (
         <div className="space-y-4">
+          <input
+            className="border p-2 rounded w-full"
+            placeholder="Buscar companyId"
+            value={paymentSearch}
+            onChange={e => setPaymentSearch(e.target.value)}
+          />
           <div className="flex space-x-2">
             <input
               className="border p-2 rounded"
@@ -256,6 +268,12 @@ export default function SuperAdminRouter() {
               onChange={e => setNewPayment({ ...newPayment, amount: e.target.value })}
             />
             <input
+              className="border p-2 rounded"
+              placeholder="Código de transferencia"
+              value={newPayment.transferCode}
+              onChange={e => setNewPayment({ ...newPayment, transferCode: e.target.value })}
+            />
+            <input
               type="date"
               className="border p-2 rounded"
               value={newPayment.paidAt}
@@ -268,15 +286,17 @@ export default function SuperAdminRouter() {
               <tr className="bg-gray-100">
                 <th className="border p-1">companyId</th>
                 <th className="border p-1">Monto</th>
+                <th className="border p-1">Código</th>
                 <th className="border p-1">Fecha</th>
                 <th className="border p-1">Acciones</th>
               </tr>
             </thead>
             <tbody>
-              {payments.map(p => (
+              {filteredPayments.map(p => (
                 <tr key={p.id}>
                   <td className="border p-1">{p.companyId}</td>
                   <td className="border p-1">{p.amount}</td>
+                  <td className="border p-1">{p.transferCode}</td>
                   <td className="border p-1">{p.paidAt ? new Date(p.paidAt.seconds ? p.paidAt.seconds * 1000 : p.paidAt).toLocaleDateString() : ''}</td>
                   <td className="border p-1">
                     <button onClick={() => deletePayment(p.id)} className="px-2 py-1 bg-red-500 text-white rounded">Eliminar</button>
