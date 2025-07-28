@@ -5,7 +5,7 @@ import { useAuth } from '../AuthProvider';
 import { Navigate } from 'react-router-dom';
 
 export default function SuperAdminRouter() {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const [tab, setTab] = useState('tenants');
   const [tenants, setTenants] = useState([]);
   const [users, setUsers] = useState([]);
@@ -27,6 +27,7 @@ export default function SuperAdminRouter() {
     return unsub;
   }, []);
 
+  if (loading) return null;
   if (!user) return <Navigate to="/" replace />;
   if (user.email !== 'admin@agendarturnos.ar') return <Navigate to="/" replace />;
 
