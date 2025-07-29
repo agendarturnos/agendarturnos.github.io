@@ -3,12 +3,17 @@
 const functions = require('firebase-functions');
 const admin     = require('firebase-admin');
 const sgMail    = require('@sendgrid/mail');
+const { MercadoPagoConfig, Customer } = require('mercadopago');
 
 admin.initializeApp();
 const db = admin.firestore();
 
 // Carga tu SendGrid API Key:
 sgMail.setApiKey(functions.config().sendgrid.key);
+const mpClient = new MercadoPagoConfig({
+  accessToken: functions.config().mercadopago.token
+});
+const mpCustomer = new Customer(mpClient);
 
 exports.sendAppointmentReminders = functions
   .pubsub
@@ -91,6 +96,17 @@ exports.createTenant = functions.https.onRequest(async (req, res) => {
       lastName: '',
       phone: ''
     });
+    try {
+      const mpResp = await mpCustomer.create({
+        body: { email, first_name: projectName || '' }
+      });
+      const mpId = mpResp.id || (mpResp.response && mpResp.response.id);
+      if (mpId) {
+        await docRef.update({ mercadopagoCustomerId: mpId });
+      }
+    } catch (mpErr) {
+      console.error('MercadoPago:', mpErr);
+    }
     res.status(200).send('ok');
   } catch (err) {
     console.error(err);

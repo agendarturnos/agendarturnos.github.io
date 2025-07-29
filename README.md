@@ -58,6 +58,12 @@ Si usas las funciones de envío de correos configura SendGrid:
 firebase functions:config:set sendgrid.key="TU_SENDGRID_API_KEY"
 ```
 
+Para habilitar la integración con Mercado Pago agrega tu token de acceso:
+
+```bash
+firebase functions:config:set mercadopago.token="TU_ACCESS_TOKEN"
+```
+
 ## Entorno de desarrollo
 
 Inicia Vite con:
