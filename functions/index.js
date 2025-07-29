@@ -59,3 +59,41 @@ exports.sendAppointmentReminders = functions
     console.log(`Enviados ${messages.length} recordatorios.`);
     return null;
   });
+
+exports.createTenant = functions.https.onRequest(async (req, res) => {
+  if (req.method !== 'POST') {
+    res.status(405).send('Method Not Allowed');
+    return;
+  }
+  try {
+    const { slug, projectName, email, password } = req.body;
+    if (!slug || !email || !password) {
+      res.status(400).send('Missing fields');
+      return;
+    }
+    const docRef = db.collection('tenants').doc(slug);
+    const docSnap = await docRef.get();
+    if (docSnap.exists) {
+      res.status(400).send('Slug already exists');
+      return;
+    }
+    // create tenant document
+    await docRef.set({ companyId: slug, projectName: projectName || '' });
+    // create auth user
+    const userRecord = await admin.auth().createUser({ email, password });
+    // create user profile
+    await db.collection('users').doc(userRecord.uid).set({
+      uid: userRecord.uid,
+      email,
+      companyId: slug,
+      isAdmin: true,
+      firstName: '',
+      lastName: '',
+      phone: ''
+    });
+    res.status(200).send('ok');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send(err.message);
+  }
+});
