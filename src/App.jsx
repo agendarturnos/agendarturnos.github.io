@@ -20,12 +20,14 @@ import AdminRouter from './routes/AdminRouter';
 import SuperAdminRouter from './routes/SuperAdminRouter';
 import Login from './components/Login';
 import MainNavbar from './components/MainNavbar';
+import TenantSignup from './components/TenantSignup';
 
 export default function App() {
   return (
     <AuthProvider>
       <Router>
         <Routes>
+          <Route path="/alta" element={<TenantSignup />} />
           <Route path="/super/*" element={<SuperAdminRouter />} />
           <Route
             path="/:tenant/*"
