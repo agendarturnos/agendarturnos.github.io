@@ -42,7 +42,7 @@ VITE_FIREBASE_APP_ID=XXXX
 
 ### Configuración de clientes (tenants)
 
-Crea una colección `tenants` en Firestore donde cada documento represente un cliente. El ID del documento será el *slug* utilizado en la URL y debe incluir al menos los campos `companyId` y `projectName`:
+Crea una colección `tenants` en Firestore donde cada documento represente un cliente. El ID del documento será el _slug_ utilizado en la URL y debe incluir al menos los campos `companyId` y `projectName`:
 
 ```text
 tenants/
@@ -63,6 +63,15 @@ Para habilitar la integración con Mercado Pago agrega tu token de acceso:
 ```bash
 firebase functions:config:set mercadopago.token="TU_ACCESS_TOKEN"
 ```
+
+Y define la URL de pago que se mostrará en el formulario de alta:
+
+```bash
+echo "VITE_MERCADOPAGO_LINK=TU_LINK_DE_PAGO" > .env
+```
+
+El formulario de alta para nuevos tenants solicitará además del `slug` un `companyId` (identificador de la empresa),
+el nombre del proyecto, un email y una contraseña.
 
 ## Entorno de desarrollo
 
@@ -93,4 +102,3 @@ Para desplegar las Cloud Functions (y Hosting si lo configuras) usa:
 ```bash
 firebase deploy
 ```
-
