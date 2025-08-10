@@ -41,7 +41,8 @@ export default function Login() {
           lastName:  lastName.trim(),
           phone:     `${phoneCode}${phoneArea}${phone.trim()}`,
           email:     email.trim(),
-          isAdmin:   false
+          isAdmin:   false,
+          isProfesional: false
         });
       } else {
         await signInWithEmailAndPassword(auth, email, password);

@@ -6,6 +6,7 @@ import AdminAppointmentsScreen from './AdminAppointmentsScreen';
 import AdminCategoryScreen     from './AdminCategoryScreen';
 
 export default function AdminTabs({
+  profile,
   services,
   stylists,
   appointments,
@@ -20,38 +21,45 @@ export default function AdminTabs({
   onUpdateCategory,
   onDeleteCategory
 }) {
-  const [tab, setTab] = useState('services');
+  const isAdmin = profile?.isAdmin;
+  const [tab, setTab] = useState(isAdmin ? 'services' : 'appointments');
 
   return (
     <div className="p-2">
       <div className="flex flex-wrap space-x-2 mb-4">
-        <button
-          onClick={() => setTab('services')}
-          className={`px-4 py-2 my-2 rounded ${tab === 'services' ? 'bg-[#f1bc8a] text-white' : 'bg-gray-200'}`}
-        >
-          Servicios
-        </button>
-        <button
-          onClick={() => setTab('professionals')}
-          className={`px-4 py-2 my-2 rounded ${tab === 'professionals' ? 'bg-[#f1bc8a] text-white' : 'bg-gray-200'}`}
-        >
-          Profesionales
-        </button>
+        {isAdmin && (
+          <button
+            onClick={() => setTab('services')}
+            className={`px-4 py-2 my-2 rounded ${tab === 'services' ? 'bg-[#f1bc8a] text-white' : 'bg-gray-200'}`}
+          >
+            Servicios
+          </button>
+        )}
+        {isAdmin && (
+          <button
+            onClick={() => setTab('professionals')}
+            className={`px-4 py-2 my-2 rounded ${tab === 'professionals' ? 'bg-[#f1bc8a] text-white' : 'bg-gray-200'}`}
+          >
+            Profesionales
+          </button>
+        )}
         <button
           onClick={() => setTab('appointments')}
           className={`px-4 py-2 my-2 rounded ${tab === 'appointments' ? 'bg-[#f1bc8a] text-white' : 'bg-gray-200'}`}
         >
           Turnos
         </button>
-        <button
-          onClick={() => setTab('categories')}
-          className={`px-4 py-2 my-2 rounded ${tab === 'categories' ? 'bg-[#f1bc8a] text-white' : 'bg-gray-200'}`}
-        >
-          Categorías
-        </button>
+        {isAdmin && (
+          <button
+            onClick={() => setTab('categories')}
+            className={`px-4 py-2 my-2 rounded ${tab === 'categories' ? 'bg-[#f1bc8a] text-white' : 'bg-gray-200'}`}
+          >
+            Categorías
+          </button>
+        )}
       </div>
       <div>
-        {tab === 'services' && (
+        {tab === 'services' && isAdmin && (
           <AdminServiceScreen
             services={services}
             categories={categories}
@@ -60,7 +68,7 @@ export default function AdminTabs({
             onDeleteService={onDeleteService}
           />
         )}
-        {tab === 'professionals' && (
+        {tab === 'professionals' && isAdmin && (
           <AdminProfessionalScreen
             services={services}
             stylists={stylists}
@@ -71,11 +79,12 @@ export default function AdminTabs({
         )}
         {tab === 'appointments' && (
           <AdminAppointmentsScreen
+            profile={profile}
             stylists={stylists}
             appointments={appointments}
           />
         )}
-        {tab === 'categories' && (
+        {tab === 'categories' && isAdmin && (
           <AdminCategoryScreen
             categories={categories}
             onAdd={onAddCategory}

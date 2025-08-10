@@ -14,15 +14,15 @@ import {
 import { db } from '../firebaseConfig';
 import { useTenant } from '../TenantProvider';
 
-export default function AdminRouter() {
+export default function AdminRouter({ profile }) {
   const { companyId } = useTenant();
-  const [services, setServices]       = useState([]);
-  const [stylists, setStylists]       = useState([]);
+  const [services, setServices] = useState([]);
+  const [stylists, setStylists] = useState([]);
   const [appointments, setAppointments] = useState([]);
-  const [categories, setCategories]   = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [myStylistId, setMyStylistId] = useState(null);
 
   useEffect(() => {
-    // Query compartido: todos filtrados por companyId
     const qServices = query(
       collection(db, 'services'),
       where('companyId', '==', companyId)
@@ -30,28 +30,6 @@ export default function AdminRouter() {
     const unsubServices = onSnapshot(qServices, snap =>
       setServices(snap.docs.map(d => ({ id: d.id, ...d.data() })))
     );
-
-    const qStylists = query(
-      collection(db, 'stylists'),
-      where('companyId', '==', companyId)
-    );
-    const unsubStylists = onSnapshot(qStylists, snap =>
-      setStylists(snap.docs.map(d => ({ id: d.id, ...d.data() })))
-    );
-
-    const qAppointments = query(
-      collection(db, 'appointments'),
-      where('companyId', '==', companyId)
-    );
-    const unsubAppointments = onSnapshot(qAppointments, snap => {
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      setAppointments(
-        snap.docs
-          .map(d => ({ id: d.id, ...d.data() }))
-          .filter(a => new Date(a.datetime) >= today)
-      );
-    });
 
     const qCategories = query(
       collection(db, 'categories'),
@@ -63,11 +41,44 @@ export default function AdminRouter() {
 
     return () => {
       unsubServices();
-      unsubStylists();
-      unsubAppointments();
       unsubCategories();
     };
-  }, []);
+  }, [companyId]);
+
+  useEffect(() => {
+    const qStylists = query(
+      collection(db, 'stylists'),
+      where('companyId', '==', companyId)
+    );
+    const unsubStylists = onSnapshot(qStylists, snap => {
+      const list = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      setStylists(list);
+      if (profile?.isProfesional) {
+        const me = list.find(s => s.email === profile.email);
+        setMyStylistId(me ? me.id : null);
+      }
+    });
+    return () => unsubStylists();
+  }, [companyId, profile]);
+
+  useEffect(() => {
+    const qAppointments = query(
+      collection(db, 'appointments'),
+      where('companyId', '==', companyId)
+    );
+    const unsubAppointments = onSnapshot(qAppointments, snap => {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      let list = snap.docs
+        .map(d => ({ id: d.id, ...d.data() }))
+        .filter(a => new Date(a.datetime) >= today);
+      if (profile?.isProfesional && myStylistId) {
+        list = list.filter(a => a.stylistId === myStylistId);
+      }
+      setAppointments(list);
+    });
+    return () => unsubAppointments();
+  }, [companyId, profile, myStylistId]);
 
   // Al crear, añadimos companyId en los campos
   const handleAddService = async data => {
@@ -120,6 +131,7 @@ export default function AdminRouter() {
 
   return (
     <AdminTabs
+      profile={profile}
       services={services}
       stylists={stylists}
       appointments={appointments}

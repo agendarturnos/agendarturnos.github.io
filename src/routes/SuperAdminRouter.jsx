@@ -74,13 +74,14 @@ export default function SuperAdminRouter() {
   };
 
   const saveUser = async () => {
-    const { firstName, lastName, phone, companyId, isAdmin } = editUser;
+    const { firstName, lastName, phone, companyId, isAdmin, isProfesional } = editUser;
     await updateDoc(doc(db, 'users', editUser.id), {
       firstName: firstName || '',
       lastName: lastName || '',
       phone: phone || '',
       companyId: companyId || '',
-      isAdmin: !!isAdmin
+      isAdmin: !!isAdmin,
+      isProfesional: !!isProfesional
     });
     setEditUser(null);
   };
@@ -235,6 +236,16 @@ export default function SuperAdminRouter() {
                   onChange={e => setEditUser({ ...editUser, isAdmin: e.target.checked })}
                 />
                 <span>Es admin</span>
+              </label>
+              <label className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  checked={editUser.isProfesional || false}
+                  onChange={e =>
+                    setEditUser({ ...editUser, isProfesional: e.target.checked })
+                  }
+                />
+                <span>Es profesional</span>
               </label>
               <div className="space-x-2">
                 <button onClick={saveUser} className="px-3 py-1 bg-blue-500 text-white rounded">Guardar</button>

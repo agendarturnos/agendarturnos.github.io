@@ -12,8 +12,9 @@ export default function MainNavbar() {
   );
   const { user, profile } = useAuth();
   const { slug, projectName, companyId } = useTenant();
-  const isTenantAdmin =
-    profile?.isAdmin === true && profile?.companyId === companyId;
+  const isTenantStaff =
+    (profile?.isAdmin || profile?.isProfesional) &&
+    profile?.companyId === companyId;
 
   // Listen for viewport changes to update isDesktop
   useEffect(() => {
@@ -72,7 +73,7 @@ export default function MainNavbar() {
                     Mi Perfil
                   </Link>
                 </li>
-                {isTenantAdmin && (
+                {isTenantStaff && (
                   <li className="nav-item">
                     <Link
                       className="nav-link"
