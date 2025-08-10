@@ -69,7 +69,6 @@ export default function AdminAppointmentsScreen({ profile, stylists = [], appoin
         value={selectedStylist}
         onChange={e => setSelectedStylist(e.target.value)}
       >
-        <option value="">Todos los profesionales</option>
         {stylists.map(st => (
           <option key={st.id} value={st.id}>
             {st.name}
@@ -87,7 +86,7 @@ export default function AdminAppointmentsScreen({ profile, stylists = [], appoin
 
     return (
       <div className="p-4 max-w-4xl mx-auto">
-        {dropdown}
+
         <button
           onClick={() => setSelectedDate(null)}
           className="mb-4 text-[#f1bc8a] underline"
