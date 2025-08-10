@@ -12,6 +12,7 @@ export default function AdminProfessionalScreen({
 
   const [name, setName] = useState('');
   const [alias, setAlias] = useState('');
+  const [email, setEmail] = useState('');
   const [selected, setSelected] = useState([]);
   const [schedule, setSchedule] = useState({});
   const [exceptions, setExceptions] = useState([]);
@@ -25,6 +26,7 @@ export default function AdminProfessionalScreen({
       if (prof) {
         setName(prof.name);
         setAlias(prof.alias || '');
+        setEmail(prof.email || '');
         setSelected(prof.specialties || []);
         setSchedule(
           Object.fromEntries(
@@ -122,6 +124,7 @@ export default function AdminProfessionalScreen({
   const resetForm = () => {
     setName('');
     setAlias('');
+    setEmail('');
     setSelected([]);
     setSchedule({});
     setExceptions([]);
@@ -132,6 +135,7 @@ export default function AdminProfessionalScreen({
     const data = {
       name,
       alias: alias.trim(),
+      email: email.trim(),
       specialties: selected,
       schedule,
       exceptions
@@ -170,6 +174,13 @@ export default function AdminProfessionalScreen({
           placeholder="Alias de pago"
           value={alias}
           onChange={e => setAlias(e.target.value)}
+          className="border p-2 w-full rounded"
+        />
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
           className="border p-2 w-full rounded"
         />
 
@@ -342,6 +353,9 @@ export default function AdminProfessionalScreen({
                   </p>
                   <p className="text-sm text-gray-500">
                     Alias de pago: {st.alias || '—'}
+                  </p>
+                  <p className="text-sm text-gray-500">
+                    Email: {st.email || '—'}
                   </p>
                 </div>
                 <div className="space-x-2">

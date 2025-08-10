@@ -47,8 +47,9 @@ function AppContent() {
   const { user, profile } = useAuth();
   const { slug, projectName, companyId } = useTenant();
   // usados para mostrar/ocultar el panel admin
-  const isTenantAdmin    =
-    profile?.isAdmin === true && profile?.companyId === companyId;
+  const canAccessAdmin =
+    (profile?.isAdmin || profile?.isProfesional) &&
+    profile?.companyId === companyId;
 
   return (
     <>
@@ -98,8 +99,8 @@ function AppContent() {
             path="admin/*"
             element={
               <RequireAuth>
-                {isTenantAdmin ? (
-                  <AdminRouter />
+                {canAccessAdmin ? (
+                  <AdminRouter profile={profile} />
                 ) : (
                   <Navigate to="" replace />
                 )}

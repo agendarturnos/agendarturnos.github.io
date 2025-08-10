@@ -100,6 +100,7 @@ exports.createTenant = functions.https.onRequest(async (req, res) => {
       email,
       companyId: companyId.trim(),
       isAdmin: true,
+      isProfesional: false,
       firstName: "",
       lastName: "",
       phone: "",

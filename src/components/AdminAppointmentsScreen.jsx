@@ -13,8 +13,9 @@ import { db } from '../firebaseConfig';
 import { useTenant } from '../TenantProvider';
 import TimelineChart from './TimelineChart';
 
-export default function AdminAppointmentsScreen({ appointments }) {
+export default function AdminAppointmentsScreen({ profile, stylists = [], appointments }) {
   const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedStylist, setSelectedStylist] = useState('');
   const [users, setUsers] = useState([]);
   const { usaConfirmacionSenia } = useTenant() || {};
 
@@ -31,13 +32,20 @@ export default function AdminAppointmentsScreen({ appointments }) {
     return m;
   }, [users]);
 
+  const filteredAppointments = useMemo(() => {
+    if (profile?.isAdmin && selectedStylist) {
+      return appointments.filter(a => a.stylistId === selectedStylist);
+    }
+    return appointments;
+  }, [appointments, profile, selectedStylist]);
+
   const byDate = useMemo(() => {
-    return appointments.reduce((acc, appt) => {
+    return filteredAppointments.reduce((acc, appt) => {
       const key = format(parseISO(appt.datetime), 'yyyy-MM-dd');
       (acc[key] ||= []).push(appt);
       return acc;
     }, {});
-  }, [appointments]);
+  }, [filteredAppointments]);
 
   const dates = useMemo(() => Object.keys(byDate).sort(), [byDate]);
 
@@ -54,6 +62,23 @@ export default function AdminAppointmentsScreen({ appointments }) {
     alert('Turno cancelado');
   };
 
+  const dropdown = profile?.isAdmin && (
+    <div className="mb-4">
+      <select
+        className="border p-2 rounded"
+        value={selectedStylist}
+        onChange={e => setSelectedStylist(e.target.value)}
+      >
+        <option value="">Todos los profesionales</option>
+        {stylists.map(st => (
+          <option key={st.id} value={st.id}>
+            {st.name}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+
   if (selectedDate) {
     const list = byDate[selectedDate].sort(
       (a, b) => new Date(a.datetime) - new Date(b.datetime)
@@ -62,6 +87,7 @@ export default function AdminAppointmentsScreen({ appointments }) {
 
     return (
       <div className="p-4 max-w-4xl mx-auto">
+        {dropdown}
         <button
           onClick={() => setSelectedDate(null)}
           className="mb-4 text-[#f1bc8a] underline"
@@ -238,6 +264,7 @@ export default function AdminAppointmentsScreen({ appointments }) {
   // Lista de días
   return (
     <div className="p-4 max-w-4xl mx-auto">
+      {dropdown}
       <h2 className="text-2xl font-bold text-center mb-6">
         Selecciona un día
       </h2>
