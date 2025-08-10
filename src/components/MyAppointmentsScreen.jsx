@@ -159,7 +159,7 @@ export default function MyAppointmentsScreen() {
                   )}
 
                   {/* Alias de pago */}
-                  {usaConfirmacionSenia && stylistAlias && (
+                  { stylistAlias && (
                     <div className="flex items-center text-sm text-gray-700">
                       <span>Alias de pago: {stylistAlias}</span>
                       <button
