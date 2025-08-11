@@ -64,10 +64,15 @@ Para habilitar la integración con Mercado Pago agrega tu token de acceso:
 firebase functions:config:set mercadopago.token="TU_ACCESS_TOKEN"
 ```
 
-Y define la URL de pago que se mostrará en el formulario de alta:
+Y define las URLs de pago que se mostrarán en el formulario de alta para
+cada plan:
 
 ```bash
-echo "VITE_MERCADOPAGO_LINK=TU_LINK_DE_PAGO" > .env
+echo "VITE_MP_STANDARD_LINK=LINK_STANDARD"   > .env
+echo "VITE_MP_AVANZADO_LINK=LINK_AVANZADO" >> .env
+echo "VITE_MP_ILIMITADO_LINK=LINK_ILIMITADO" >> .env
+# Enlace de pago genérico opcional
+echo "VITE_MERCADOPAGO_LINK=LINK_POR_DEFECTO" >> .env
 ```
 
 El formulario de alta para nuevos tenants solicitará además del `slug` un `companyId` (identificador de la empresa),
