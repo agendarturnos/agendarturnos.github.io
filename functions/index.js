@@ -122,3 +122,39 @@ exports.createTenant = functions.https.onRequest(async (req, res) => {
     res.status(500).send(err.message);
   }
 });
+
+exports.markUserAsProfessional = functions.firestore
+  .document("users/{uid}")
+  .onCreate(async (snap) => {
+    const data = snap.data();
+    if (!data.email) return null;
+    const profSnap = await db
+      .collection("stylists")
+      .where("email", "==", data.email)
+      .limit(1)
+      .get();
+    if (!profSnap.empty) {
+      await snap.ref.update({ isProfesional: true });
+    }
+    return null;
+  });
+
+exports.syncProfessionalEmail = functions.firestore
+  .document("stylists/{id}")
+  .onWrite(async (change) => {
+    const after = change.after.exists ? change.after.data() : null;
+    if (!after || !after.email) return null;
+    const userSnap = await db
+      .collection("users")
+      .where("email", "==", after.email)
+      .get();
+    if (userSnap.empty) return null;
+    const batch = db.batch();
+    userSnap.forEach((u) => {
+      if (!u.data().isProfesional) {
+        batch.update(u.ref, { isProfesional: true });
+      }
+    });
+    await batch.commit();
+    return null;
+  });

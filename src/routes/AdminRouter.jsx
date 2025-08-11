@@ -9,7 +9,8 @@ import {
   doc,
   query,
   where,
-  onSnapshot
+  onSnapshot,
+  getDocs
 } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
 import { useTenant } from '../TenantProvider';
@@ -102,12 +103,34 @@ export default function AdminRouter({ profile }) {
       ...data,
       companyId: companyId
     });
+    if (data.email) {
+      const q = query(collection(db, 'users'), where('email', '==', data.email));
+      const snap = await getDocs(q);
+      await Promise.all(
+        snap.docs.map(u =>
+          u.data().isProfesional
+            ? Promise.resolve()
+            : updateDoc(u.ref, { isProfesional: true })
+        )
+      );
+    }
   };
   const handleUpdateProfessional = async (id, data) => {
     await updateDoc(doc(db, 'stylists', id), {
       ...data,
       companyId: companyId
     });
+    if (data.email) {
+      const q = query(collection(db, 'users'), where('email', '==', data.email));
+      const snap = await getDocs(q);
+      await Promise.all(
+        snap.docs.map(u =>
+          u.data().isProfesional
+            ? Promise.resolve()
+            : updateDoc(u.ref, { isProfesional: true })
+        )
+      );
+    }
   };
   const handleDeleteProfessional = async id => {
     await deleteDoc(doc(db, 'stylists', id));
