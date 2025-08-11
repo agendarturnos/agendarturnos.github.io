@@ -95,9 +95,19 @@ exports.createTenant = functions.https.onRequest(async (req, res) => {
     return;
   }
   try {
-    const { slug, companyId, projectName, email, password } = req.body;
-    if (!slug || !companyId || !email || !password) {
-      res.status(400).send("Missing fields");
+    const { slug: rawSlug, companyId: rawCompanyId, projectName, email, password } = req.body;
+    const slug = (rawSlug || "").trim().toLowerCase();
+    const companyId = (rawCompanyId || "").trim().toLowerCase();
+    const slugRegex = /^[a-z0-9-]{3,}$/;
+    if (
+      !slug ||
+      !companyId ||
+      !email ||
+      !password ||
+      !slugRegex.test(slug) ||
+      !slugRegex.test(companyId)
+    ) {
+      res.status(400).send("Invalid or missing fields");
       return;
     }
     const docRef = db.collection("tenants").doc(slug);
@@ -108,7 +118,7 @@ exports.createTenant = functions.https.onRequest(async (req, res) => {
     }
     // create tenant document
     await docRef.set({
-      companyId: companyId.trim(),
+      companyId,
       projectName: projectName || "",
     });
     // create auth user
@@ -117,7 +127,7 @@ exports.createTenant = functions.https.onRequest(async (req, res) => {
     await db.collection("users").doc(userRecord.uid).set({
       uid: userRecord.uid,
       email,
-      companyId: companyId.trim(),
+      companyId,
       isAdmin: true,
       isProfesional: false,
       firstName: "",
