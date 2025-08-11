@@ -23,6 +23,7 @@ export default function TenantSignup() {
   const [confirmedPayment, setConfirmedPayment] = useState(false);
 
   const mpLink = import.meta.env.VITE_MERCADOPAGO_LINK || "https://mpago.la/1NLEpxk";
+  const slugRegex = /^[a-z0-9-]{3,}$/;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -42,6 +43,13 @@ export default function TenantSignup() {
       setLoading(false);
       return;
     }
+    const cleanSlug = slug.trim().toLowerCase();
+    if (!slugRegex.test(cleanSlug)) {
+      setMessage("Slug inválido");
+      setIsError(true);
+      setLoading(false);
+      return;
+    }
 
     try {
       // 1) Crear cuenta Auth
@@ -50,9 +58,9 @@ export default function TenantSignup() {
 
       // 2) Guardar tenant
       await setDoc(
-        doc(db, "tenants", slug.trim()),
+        doc(db, "tenants", cleanSlug),
         {
-          companyId: slug.trim(),
+          companyId: cleanSlug,
           projectName: projectName.trim(),
           ownerUid: uid,
           ownerEmail: email.trim(),
@@ -69,7 +77,7 @@ export default function TenantSignup() {
           lastName: lastName.trim(),
           phone: `${phoneCode}${phoneArea}${phone.trim()}`,
           email: email.trim(),
-          companyId: slug.trim(),
+          companyId: cleanSlug,
           isAdmin: true,
           createdAt: new Date(),
         }
@@ -79,7 +87,7 @@ export default function TenantSignup() {
       setIsError(false);
 
       // Redirigir tras 5s
-      const newSlug = slug.trim();
+      const newSlug = cleanSlug;
       setTimeout(() => navigate(`/${newSlug}`), 3000);
 
       // Reset campos
@@ -107,7 +115,9 @@ export default function TenantSignup() {
   };
 
   const handleSlugChange = (e) => {
-    const v = e.target.value.replace(/\s+/g, "");
+    const v = e.target.value
+      .toLowerCase()
+      .replace(/[^a-z0-9-]/g, "");
     setSlug(v);
   };
 
