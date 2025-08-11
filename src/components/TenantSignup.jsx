@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../firebaseConfig";
 import { doc, setDoc } from "firebase/firestore";
@@ -7,6 +7,7 @@ import { COUNTRY_CODES, AREA_CODES } from "../data/phone";
 
 export default function TenantSignup() {
   const navigate = useNavigate();
+  const { plan } = useParams();
   const [slug, setSlug] = useState("");
   const [projectName, setProjectName] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -22,7 +23,29 @@ export default function TenantSignup() {
   const [isError, setIsError] = useState(false);
   const [confirmedPayment, setConfirmedPayment] = useState(false);
 
-  const mpLink = import.meta.env.VITE_MERCADOPAGO_LINK || "https://mpago.la/1NLEpxk";
+  const plans = {
+    standard: {
+      label: "standard",
+      link:
+        import.meta.env.VITE_MP_STANDARD_LINK || "https://mpago.la/standard",
+    },
+    avanzado: {
+      label: "avanzado",
+      link:
+        import.meta.env.VITE_MP_AVANZADO_LINK || "https://mpago.la/avanzado",
+    },
+    ilimitado: {
+      label: "ilimitado",
+      link:
+        import.meta.env.VITE_MP_ILIMITADO_LINK || "https://mpago.la/ilimitado",
+    },
+  };
+
+  const selectedPlan = plans[plan];
+  const mpLink =
+    selectedPlan?.link ||
+    import.meta.env.VITE_MERCADOPAGO_LINK ||
+    "https://mpago.la/1NLEpxk";
   const slugRegex = /^[a-z0-9-]{3,}$/;
 
   const handleSubmit = async (e) => {
@@ -123,7 +146,9 @@ export default function TenantSignup() {
 
   return (
     <div className="container mt-5" style={{ maxWidth: "400px" }}>
-      <h1 className="text-center mb-3">Crear Cuenta</h1>
+      <h1 className="text-center mb-3">
+        Crear Cuenta{selectedPlan ? ` plan ${selectedPlan.label}` : ""}
+      </h1>
 
       <form onSubmit={handleSubmit}>
 

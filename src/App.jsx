@@ -29,7 +29,7 @@ export default function App() {
       <Router>
         <Routes>
           <Route path="/login" element={<PortalLogin />} />
-          <Route path="/alta" element={<TenantSignup />} />
+          <Route path="/alta/:plan?" element={<TenantSignup />} />
           <Route path="/super/*" element={<SuperAdminRouter />} />
           <Route
             path="/:tenant/*"
