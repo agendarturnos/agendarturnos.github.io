@@ -7,7 +7,7 @@ import {
   createUserWithEmailAndPassword
 } from 'firebase/auth';
 import { auth, db } from '../firebaseConfig';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, collection, query, where, getDocs, updateDoc } from 'firebase/firestore';
 import { COUNTRY_CODES, AREA_CODES } from '../data/phone';
 
 export default function Login() {
@@ -44,6 +44,12 @@ export default function Login() {
           isAdmin:   false,
           isProfesional: false
         });
+        const profSnap = await getDocs(
+          query(collection(db, 'stylists'), where('email', '==', email.trim()))
+        );
+        if (!profSnap.empty) {
+          await updateDoc(doc(db, 'users', uid), { isProfesional: true });
+        }
       } else {
         await signInWithEmailAndPassword(auth, email, password);
       }
