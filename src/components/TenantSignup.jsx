@@ -24,20 +24,20 @@ export default function TenantSignup() {
   const [confirmedPayment, setConfirmedPayment] = useState(false);
 
   const plans = {
-    standard: {
-      label: "standard",
+    estandar: {
+      label: "estandar",
       link:
-        import.meta.env.VITE_MP_STANDARD_LINK || "https://mpago.la/standard",
+        import.meta.env.VITE_MP_ESTANDAR_LINK || "https://mpago.la/2m39qhv",
     },
     avanzado: {
       label: "avanzado",
       link:
-        import.meta.env.VITE_MP_AVANZADO_LINK || "https://mpago.la/avanzado",
+        import.meta.env.VITE_MP_AVANZADO_LINK || "https://mpago.la/2pcxNWm",
     },
     ilimitado: {
       label: "ilimitado",
       link:
-        import.meta.env.VITE_MP_ILIMITADO_LINK || "https://mpago.la/ilimitado",
+        import.meta.env.VITE_MP_ILIMITADO_LINK || "https://mpago.la/2RFmtV4",
     },
   };
 
