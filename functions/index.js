@@ -71,6 +71,25 @@ exports.sendAppointmentReminders = functions.pubsub
   });
 
 exports.createTenant = functions.https.onRequest(async (req, res) => {
+  const authHeader = req.headers.authorization || "";
+  if (!authHeader.startsWith("Bearer ")) {
+    res.status(401).send("Unauthorized");
+    return;
+  }
+  try {
+    const idToken = authHeader.split("Bearer ")[1];
+    const decoded = await admin.auth().verifyIdToken(idToken);
+    if (
+      decoded.email !== "admin@agendarturnos.ar" &&
+      decoded.role !== "admin"
+    ) {
+      res.status(403).send("Forbidden");
+      return;
+    }
+  } catch (err) {
+    res.status(401).send("Unauthorized");
+    return;
+  }
   if (req.method !== "POST") {
     res.status(405).send("Method Not Allowed");
     return;
