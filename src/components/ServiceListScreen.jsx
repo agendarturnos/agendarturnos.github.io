@@ -90,7 +90,7 @@ export default function ServiceListScreen() {
               Duración: {svc.duration} min
             </p>
             <Link
-              to={`/${slug}/summary`}
+              to={`/${slug}/stylists`}
               state={{ service: svc }}
               className="mt-auto h4 text-capitalize w-full py-2 border border-[#f1bc8a] text-[#f1bc8a] rounded-full text-center hover:bg-[#f1bc8a] hover:text-white transition"
             >
