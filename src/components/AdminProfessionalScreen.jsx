@@ -344,7 +344,7 @@ export default function AdminProfessionalScreen({
             {stylists.map(st => (
               <li
                 key={st.id}
-                className="bg-white rounded-2xl shadow p-4 flex justify-between items-center"
+                className="bg-white rounded-2xl shadow p-4 flex flex-col sm:flex-row sm:justify-between sm:items-center"
               >
                 <div>
                   <p className="font-semibold">{st.name}</p>
@@ -358,7 +358,7 @@ export default function AdminProfessionalScreen({
                     Email: {st.email || '—'}
                   </p>
                 </div>
-                <div className="space-x-2">
+                <div className="flex space-x-2 mt-2 self-end sm:mt-0 sm:self-auto">
                   <button
                     onClick={() => setEditingId(st.id)}
                     className="text-yellow-500 hover:text-yellow-600 transition"
