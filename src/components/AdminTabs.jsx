@@ -4,6 +4,7 @@ import AdminServiceScreen   from './AdminServiceScreen';
 import AdminProfessionalScreen from './AdminProfessionalScreen';
 import AdminAppointmentsScreen from './AdminAppointmentsScreen';
 import AdminCategoryScreen     from './AdminCategoryScreen';
+import AdminConfigScreen       from './AdminConfigScreen';
 
 export default function AdminTabs({
   profile,
@@ -57,6 +58,14 @@ export default function AdminTabs({
             Categorías
           </button>
         )}
+        {isAdmin && (
+          <button
+            onClick={() => setTab('config')}
+            className={`px-4 py-2 my-2 rounded ${tab === 'config' ? 'bg-[#f1bc8a] text-white' : 'bg-gray-200'}`}
+          >
+            Configuración
+          </button>
+        )}
       </div>
       <div>
         {tab === 'services' && isAdmin && (
@@ -92,6 +101,7 @@ export default function AdminTabs({
             onDelete={onDeleteCategory}
           />
         )}
+        {tab === 'config' && isAdmin && <AdminConfigScreen />}
       </div>
     </div>
   );
