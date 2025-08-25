@@ -48,7 +48,11 @@ export default function Login() {
           query(collection(db, 'stylists'), where('email', '==', email.trim()))
         );
         if (!profSnap.empty) {
-          await updateDoc(doc(db, 'users', uid), { isProfesional: true });
+          const profData = profSnap.docs[0].data();
+          await updateDoc(doc(db, 'users', uid), {
+            isProfesional: true,
+            companyId: profData.companyId
+          });
         }
       } else {
         await signInWithEmailAndPassword(auth, email, password);
