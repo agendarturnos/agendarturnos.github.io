@@ -163,7 +163,11 @@ exports.markUserAsProfessional = functions.firestore
       .limit(1)
       .get();
     if (!profSnap.empty) {
-      await snap.ref.update({ isProfesional: true });
+      const profData = profSnap.docs[0].data();
+      await snap.ref.update({
+        isProfesional: true,
+        companyId: profData.companyId,
+      });
     }
     return null;
   });
@@ -180,8 +184,14 @@ exports.syncProfessionalEmail = functions.firestore
     if (userSnap.empty) return null;
     const batch = db.batch();
     userSnap.forEach((u) => {
-      if (!u.data().isProfesional) {
-        batch.update(u.ref, { isProfesional: true });
+      if (
+        !u.data().isProfesional ||
+        u.data().companyId !== after.companyId
+      ) {
+        batch.update(u.ref, {
+          isProfesional: true,
+          companyId: after.companyId,
+        });
       }
     });
     await batch.commit();

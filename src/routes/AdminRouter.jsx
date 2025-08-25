@@ -107,11 +107,13 @@ export default function AdminRouter({ profile }) {
       const q = query(collection(db, 'users'), where('email', '==', data.email));
       const snap = await getDocs(q);
       await Promise.all(
-        snap.docs.map(u =>
-          u.data().isProfesional
-            ? Promise.resolve()
-            : updateDoc(u.ref, { isProfesional: true })
-        )
+        snap.docs.map(u => {
+          const needsUpdate =
+            !u.data().isProfesional || u.data().companyId !== companyId;
+          return needsUpdate
+            ? updateDoc(u.ref, { isProfesional: true, companyId })
+            : Promise.resolve();
+        })
       );
     }
   };
@@ -124,11 +126,13 @@ export default function AdminRouter({ profile }) {
       const q = query(collection(db, 'users'), where('email', '==', data.email));
       const snap = await getDocs(q);
       await Promise.all(
-        snap.docs.map(u =>
-          u.data().isProfesional
-            ? Promise.resolve()
-            : updateDoc(u.ref, { isProfesional: true })
-        )
+        snap.docs.map(u => {
+          const needsUpdate =
+            !u.data().isProfesional || u.data().companyId !== companyId;
+          return needsUpdate
+            ? updateDoc(u.ref, { isProfesional: true, companyId })
+            : Promise.resolve();
+        })
       );
     }
   };
