@@ -26,11 +26,11 @@ export default function ProfessionalCalendarScreen() {
   const [selectedDate, setSelectedDate] = useState(null);
   const [slotsByDate, setSlotsByDate] = useState({});
 
-  // Memoizamos los próximos 7 días
-  const days = useMemo(
-    () => Array.from({ length: 7 }, (_, i) => addDays(startOfDay(new Date()), i)),
-    []
-  );
+  // Memoizamos las próximas 4 semanas (28 días)
+  const days = useMemo(() => {
+    const today = startOfDay(new Date());
+    return Array.from({ length: 28 }, (_, i) => addDays(today, i));
+  }, []);
 
   // Cargar citas existentes
   useEffect(() => {
