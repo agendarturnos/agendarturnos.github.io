@@ -5,7 +5,7 @@ import { useAuth } from '../AuthProvider';
 import { COUNTRY_CODES, AREA_CODES } from '../data/phone';
 
 export default function MyProfileScreen() {
-  const { user, profile } = useAuth();
+  const { user, profile, setProfile } = useAuth();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [phoneCode, setPhoneCode] = useState(COUNTRY_CODES[0].code);
@@ -33,11 +33,13 @@ export default function MyProfileScreen() {
       return;
     }
     try {
-      await updateDoc(doc(db, 'users', user.uid), {
+      const updatedProfile = {
         firstName: firstName.trim(),
         lastName: lastName.trim(),
         phone: `${phoneCode}${phoneNumber.trim()}`,
-      });
+      };
+      await updateDoc(doc(db, 'users', user.uid), updatedProfile);
+      setProfile(prev => ({ ...prev, ...updatedProfile }));
       alert('Datos actualizados');
     } catch (err) {
       alert('Error al guardar');
