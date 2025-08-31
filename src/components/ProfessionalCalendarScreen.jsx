@@ -1,7 +1,7 @@
 // src/components/ProfessionalCalendarScreen.jsx
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { collection, getDocs, addDoc } from 'firebase/firestore';
+import { collection, getDocs, doc, runTransaction } from 'firebase/firestore';
 import { db, auth } from '../firebaseConfig';
 import {
   format,
@@ -164,22 +164,34 @@ export default function ProfessionalCalendarScreen() {
       );
       if (!confirmReservation) return;
       try {
-        await addDoc(collection(db, 'appointments'), {
-          stylistId: stylist.id,
-          stylistName: stylist.name,
-          serviceId: service.id,
-          serviceName: service.name,
-          clientId: auth.currentUser.uid,
-          clientEmail: auth.currentUser.email,
-          datetime: dt.toISOString(),
-          duration: service.duration,
-          companyId: companyId,
+        const docId = `${companyId}_${stylist.id}_${dt.getTime()}`;
+        const apptRef = doc(db, 'appointments', docId);
+        await runTransaction(db, async transaction => {
+          const apptSnap = await transaction.get(apptRef);
+          if (apptSnap.exists()) {
+            throw new Error('slot-taken');
+          }
+          transaction.set(apptRef, {
+            stylistId: stylist.id,
+            stylistName: stylist.name,
+            serviceId: service.id,
+            serviceName: service.name,
+            clientId: auth.currentUser.uid,
+            clientEmail: auth.currentUser.email,
+            datetime: dt.toISOString(),
+            duration: service.duration,
+            companyId: companyId,
+          });
         });
         alert('Turno reservado correctamente.');
         navigate(`/${slug}`);
       } catch (error) {
-        console.error('Error guardando turno:', error);
-        alert('Ocurrió un error al reservar el turno. Intenta nuevamente.');
+        if (error.message === 'slot-taken') {
+          alert('Este turno ya fue reservado. Por favor, elegí otro horario.');
+        } else {
+          console.error('Error guardando turno:', error);
+          alert('Ocurrió un error al reservar el turno. Intenta nuevamente.');
+        }
       }
     },
     [navigate, service, stylist]
