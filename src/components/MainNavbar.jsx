@@ -55,15 +55,17 @@ export default function MainNavbar() {
           <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
             {user && (
               <>
-                <li className="nav-item">
-                  <Link
-                    className="nav-link"
-                    to={`/${slug}/mis-turnos`}
-                    onClick={close}
-                  >
-                    Mis Turnos
-                  </Link>
-                </li>
+                {!isTenantStaff && (
+                  <li className="nav-item">
+                    <Link
+                      className="nav-link"
+                      to={`/${slug}/mis-turnos`}
+                      onClick={close}
+                    >
+                      Mis Turnos
+                    </Link>
+                  </li>
+                )}
                 <li className="nav-item">
                   <Link
                     className="nav-link"
