@@ -71,7 +71,11 @@ export default function AdminRouter({ profile }) {
       const today = new Date();
       today.setHours(0, 0, 0, 0);
       let list = snap.docs
-        .map(d => ({ id: d.id, ...d.data() }))
+        .map(d => ({
+          id: d.id,
+          ...d.data(),
+          datetime: d.data().datetime.toDate().toISOString(),
+        }))
         .filter(a => new Date(a.datetime) >= today);
       if (profile?.isProfesional && myStylistId) {
         list = list.filter(a => a.stylistId === myStylistId);
