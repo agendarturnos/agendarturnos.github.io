@@ -86,6 +86,19 @@ export default function MainNavbar() {
                     </Link>
                   </li>
                 )}
+                {profile?.isAdmin && (
+                  <li className="nav-item">
+                    <a
+                      className="nav-link"
+                      href="https://drive.google.com/file/d/12pJCHASdQmPoPAl_phxo4XU8lD6KYMad/view?usp=drive_link"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={close}
+                    >
+                      Instructivo
+                    </a>
+                  </li>
+                )}
               </>
             )}
             {user ? (
