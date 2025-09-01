@@ -1,265 +1,42 @@
 <!DOCTYPE html>
 <html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Agendar Turnos | Sistema de Turnos Profesional</title>
+    <meta name="description" content="Sistema de turnos para gestionar citas, pagos y recordatorios de forma automatizada." />
+    <meta name="keywords" content="turnos, citas, gestión, agenda, recordatorios, administración" />
 
-<head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Agendar Turnos | Sistema de Turnos Profesional</title>
-  <meta name="description" content="Sistema de turnos para gestionar citas, pagos y recordatorios de forma automatizada.">
-  <meta name="keywords" content="turnos, citas, gestión, agenda, recordatorios, administración">
+    <!-- Favicons -->
+    <link href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAAAAABWESUoAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QA/4ePzL8AAAAJcEhZcwAADsQAAA7EAZUrDhsAAAAHdElNRQfpBR4AKg96bZ6PAAABBUlEQVQ4y2P4TwAwjCrAquDHD9wKfv8FEq9e/f/54/efHz/+YCrYdBpIvHy1tOdQWdyWZfVf0BV8D6oEKXg55/wPd6HLH7rfoCs4J2sJFHv5/N4foIIr/69+RFLw9+/vP39u9efd/vfv7ac/P39NLnz859fPP3/gCh7de/D03tOHTx/de37jz7eHb5/den7x+d2nD+EKfnz7+v3exUs71jz4+eHHv19f9q9/8/XHl+9fkd3w9+SzD1XM/SBv/v/hI3EVIxzub/j/fyub57dXL4H+AfoCXcG/A5t//39QXvwAqODfq+78K7/RTfj379//f+Bw+A+i/+GMC5AbyI4sKqWHYaoAADom2u1ktAcmAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDI1LTA1LTMwVDAwOjQyOjAwKzAwOjAwninkswAAACV0RVh0ZGF0ZTptb2RpZnkAMjAyNS0wNS0zMFQwMDo0MjowMCswMDowMO90XA8AAAAgdEVYdHNvZnR3YXJlAGh0dHBzOi8vaW1hZ2VtYWdpY2sub3JnvM8dnQAAABh0RVh0VGh1bWI6OkRvY3VtZW50OjpQYWdlcwAxp/+7LwAAABh0RVh0VGh1bWI6OkltYWdlOjpIZWlnaHQAMTkyQF1xVQAAABd0RVh0VGh1bWI6OkltYWdlOjpXaWR0aAAxOTLTrCEIAAAAGXRFWHRUaHVtYjo6TWltZXR5cGUAaW1hZ2UvcG5nP7JWTgAAABd0RVh0VGh1bWI6Ok1UaW1lADE3NDg1NjU3MjB9+8ubAAAAD3RFWHRUaHVtYjo6U2l6ZQAwQkKUoj7sAAAAVnRFWHRUaHVtYjo6VVJJAGZpbGU6Ly8vbW50bG9nL2Zhdmljb25zLzIwMjUtMDUtMzAvNjk4ZDVhOGMxZTdhN2NhZDEwNmM1NzU2NTg5MWI0MjMuaWNvLnBuZ9ErnwsAAAAASUVORK5CYII=" rel="icon" />
+    <link href="/assets/apple-touch-icon-b2156d87.png" rel="apple-touch-icon" />
 
-  <!-- Favicons -->
-  <link href="assets/img/logo.png" rel="icon">
-  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet" />
 
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com" rel="preconnect">
-  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-
-  <!-- Vendor CSS Files -->
-  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  <link href="assets/vendor/aos/aos.css" rel="stylesheet">
-  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
-  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
-
-  <!-- Main CSS File -->
-  <link href="assets/css/main.css" rel="stylesheet">
-
-</head>
-
-<body class="index-page">
-  <header id="header" class="header d-flex align-items-center sticky-top">
-    <div class="container-fluid container-xl position-relative d-flex align-items-center">
-
-      <a href="index.html" class="logo d-flex align-items-center me-auto">
-            <img src="assets/img/2.png" class="img-fluid logo" alt="Sistema de Turnos">
-      </a>
-
-      <nav id="navmenu" class="navmenu">
-        <ul>
-          <li><a href="#inicio" class="active">Inicio</a></li>
-          <li><a href="#ventajas">Ventajas</a></li>
-          <li><a href="#planes">Planes</a></li>
-                    <li class="dropdown"><a href="#"><span>Instructivos</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-            <ul>
-              <li><a href="https://drive.google.com/file/d/14WRyUyB5VcQaZbEeAnPs0cp5qPsEJdZ7/view" target="_blank">Dar de alta</a></li>
-              <li><a href="https://drive.google.com/file/d/12pJCHASdQmPoPAl_phxo4XU8lD6KYMad/view" target="_blank">Configurar servicios</a></li>
-            </ul>
-          </li>
-          <li><a href="https://wa.me/542262666352">Contacto</a></li>
-        </ul>
-        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
-      </nav>
-
-      <a class="btn-getstarted" href="https://agendarturnos.ar/login">Ingreso Clientes</a>
-
-    </div>
-  </header>
-
-  <main class="main">
-
-    <!-- Hero Section -->
-    <section id="inicio" class="hero section">
-
-      <div class="container">
-        <div class="row gy-1">
-          <div class="col-lg-8 order-2 order-lg-1 d-flex flex-column justify-content-center" data-aos="fade-up">
-            <h2>Agendá tus turnos fácilmente</h2>
-            <br>
-            <p>• Gestioná citas, pagos y recordatorios desde un único panel de control. </p>
-            <p>• Profesionalizá la atención a tus clientes con notificaciones automáticas por email.</p>
-            <p>• Tus clientes podrán reservar los turnos a cualquier hora sin necesidad de que estés presente.</p>
-            <p>• Te ayudamos a gestionar tu tiempo de trabajo de la mejor forma.</p>
-          </div>
-          <div class="col-lg-4 mb-4 order-1 order-lg-2 hero-img" data-aos="zoom-out" data-aos-delay="100">
-            <img src="assets/img/1.png" class="img-fluid imgw animated w-100" alt="Sistema de Turnos">
-          </div>
-        </div>
-      </div>
-
-    </section><!-- /Hero Section -->
-
-
-    <!-- Services Section -->
-    <section id="ventajas" class="services section light-background">
-
-      <!-- Section Title -->
-      <div class="container mb-0 section-title" data-aos="fade-up">
-        <span>Ventajas</span>
-        <h2>Por qué elegirnos</h2>
-      </div><!-- End Section Title -->
-
-      <div class="container">
-
-        <div class="row gy-4">
-
-          <div class="col-lg-3 col-md-3" data-aos="fade-up" data-aos-delay="300">
-            <div class="service-item position-relative">
-              <div class="icon"><i class="bi bi-phone icon"></i></div>
-              <h3>Fácil registro y control de clientes</h3>
-              <p>Tus clientes se registran en sólo segundos, y en tu panel de turnos podrás comunicarte con ellos en sólo un click.</p>
-            </div>
-          </div><!-- End Service Item -->
+    <!-- Vendor CSS Files -->
+    <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.0/dist/lux/bootstrap.min.css" rel="stylesheet" />
 
 
 
-          <div class="col-lg-3 col-md-3" data-aos="fade-up" data-aos-delay="500">
-            <div class="service-item position-relative">
-              <div class="icon"><i class="bi bi-people icon"></i></div>
-              <h3>Multi Usuarios</h3>
-              <p>Si tu negocio tiene más de un profesional disponible podrás gestionar todo desde un sólo panel.</p>
-            </div>
-          </div><!-- End Service Item -->
-
-          <div class="col-lg-3 col-md-3" data-aos="fade-up" data-aos-delay="600">
-            <div class="service-item position-relative">
-              <div class="icon"><i class="bi bi-tools icon"></i></div>
-              <h3>Configurable</h3>
-              <p>Días y horarios configurables. Editá el precio y duración de tus servicios en segundos.</p>
-            </div>
-          </div><!-- End Service Item -->
-
-          <div class="col-lg-3 col-md-3" data-aos="fade-up" data-aos-delay="400">
-            <div class="service-item position-relative">
-              <div class="icon"><i class="bi bi-headset icon"></i></div>
-              <h3>Soporte Personalizado</h3>
-              <p>Atención directa por WhatsApp, Instagram o email para resolver consultas o recibir ayuda en las configuraciones.</p>
-            </div>
-          </div><!-- End Service Item -->
-        </div>
-
-      </div>
-
-    </section><!-- /Services Section -->
-
-<section id="planes" class="portfolio-details section">
-
-      <div class="container aos-init aos-animate" data-aos="fade-up" data-aos-delay="100">
-<h2 class="text-center mb-5">PLANES DISPONIBLES</h2>
-        <div class="row gy-4">
-                
-
-          <div class="col-lg-4">
-            <div class="portfolio-info aos-init aos-animate" data-aos="fade-up" data-aos-delay="200">
-              <h3 class="text-center">Plan Estandar</h3>
-              <h6 class="text-center">Ideal para emprendedores</h6>
-              <br>
-              <ul>
-                <li><strong>Profesionales</strong>: Hasta 5.</li>
-                <li><strong>Turnos</strong>: 5000 por mes.</li>
-                <li><strong>Servicios</strong>: Configurables e Ilimitados.</li>
-                <li><strong>Enlace</strong>: <a href="#">agendarturnos.ar/tumarca</a></li>
-                <br><br>
-                <h5 class="text-center"><b>Precio</b>: $5.000 / mes</h5>
-                <a href="https://agendarturnos.ar/alta/estandar" class="btn-get-started mt-4 text-center d-block">Solicitar</a>
-              </ul>
-            </div>
-          </div>                
-
-         <div class="col-lg-4">
-            <div class="portfolio-info aos-init aos-animate" data-aos="fade-up" data-aos-delay="200">
-              <h3 class="text-center">Plan Avanzado</h3>
-              <h6 class="text-center">Ideal para empresas medianas</h6>
-              <br>
-              <ul>
-                <li><strong>Profesionales</strong>: Hasta 20.</li>
-                <li><strong>Turnos</strong>: 30000 por mes.</li>
-                <li><strong>Servicios</strong>: Configurables e Ilimitados</li>
-                <li><strong>Enlace</strong>: <a href="#">agendarturnos.ar/tumarca</a></li>
-                <br><br>
-                <h5 class="text-center"><b>Precio</b>: $10.000 / mes</h5>
-                <a href="https://agendarturnos.ar/alta/avanzado" class="btn-get-started mt-4 text-center d-block">Solicitar</a>
-              </ul>
-            </div>
-          </div>                
-
-          <div class="col-lg-4">
-            <div class="portfolio-info aos-init aos-animate" data-aos="fade-up" data-aos-delay="200">
-              <h3 class="text-center">Plan Ilimitado</h3>
-              <h6 class="text-center">Ideal para grandes empresas</h6>
-              <br>
-              <ul>
-                <li><strong>Profesionales</strong>: Ilimitado.</li>
-                <li><strong>Turnos</strong>: Sin límite.</li>
-                <li><strong>Imagen</strong>: Logo y colores propios.</li>
-                <li><strong>Enlace</strong>: <a href="#">agendarturnos.ar/tumarca</a></li>
-                <br><br>
-                <h5 class="text-center"><b>Precio</b>: $25.000 / mes</h5>
-              <a href="https://agendarturnos.ar/alta/ilimitado" class="btn-get-started mt-4 text-center d-block">Solicitar</a>
-              </ul>
-            </div>
-          </div>  
-
-        </div>
-
-      </div>
-
-    </section>
+    <script>
+      const base = '';
+      const path = window.location.pathname.replace(new RegExp('^' + base), '');
+      const segments = path.split('/').filter(Boolean);
+    </script>
+    <script type="module" crossorigin src="/assets/index-b23853a5.js"></script>
+    <link rel="stylesheet" href="/assets/index-b92c1316.css">
+  </head>
+  <body>
+    
+    <div id="root"></div>
+    
+    <!-- Vendor JS Files -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
 
 
-
-
-
-
-
-  </main>
-
-  <footer id="footer" class="footer light-background">
-
-    <div class="container footer-top">
-      <div class="row gy-4">
-
-
-
-        <div class="col-lg-8 col-md-6 footer-about">
-          <a href="index.html" class="d-flex align-items-center">
-            <span class="sitename">Agendar Turnos</span>
-          </a>
-          <p>Servicio de software para gestión y automatización de turnos, pagos y recordatorios.</p>
-
-          
-          <div class="social-links d-flex mt-3">
-            <a href="https://www.instagram.com/agendar.turnos/" style="color:#f601a7" class="bi bi-instagram"></a><a href="https://www.instagram.com/agendar.turnos/"><h4 class="mt-2 mx-2">Agendar.turnos</h4></a>
-          </div>
-          <div class="social-links d-flex mt-1">
-            <a href="#contact" style="color: #45c253" class="bi bi-whatsapp"></a><a href="https://wa.me/542262666352"><h4 class="mt-2 mx-2">Contactar</h4></a>
-          </div>
-        </div>
-        <div class="col-lg-4 col-md-12 text-center text-md-start">
-          <h4>Contáctanos</h4>
-          <p>
-            Necochea, Buenos Aires<br>
-            Argentina<br><br>
-            +54 2262 666352<br>
-            agendarturnosonline@gmail.com.ar<br>
-          </p>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="container copyright text-center mt-4">
-      <p>© <strong>Agendar Turnos</strong>. Todos los derechos reservados.</p>
-    </div>
-
-  </footer>
-
-  <!-- Scroll Top -->
-  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-
-  <!-- Vendor JS Files -->
-  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="assets/vendor/aos/aos.js"></script>
-  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
-  <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
-  <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
-
-  <!-- Main JS File -->
-  <script src="assets/js/main.js"></script>
-
-</body>
-
+    <!-- Main JS File -->
+  </body>
 </html>
