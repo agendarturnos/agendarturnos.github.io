@@ -30,7 +30,11 @@ export default function MyAppointmentsScreen() {
       const snap = await getDocs(q);
       const now = new Date();
       const data = snap.docs
-        .map(d => ({ id: d.id, ...d.data() }))
+        .map(d => ({
+          id: d.id,
+          ...d.data(),
+          datetime: d.data().datetime.toDate().toISOString(),
+        }))
         .filter(a => parseISO(a.datetime) >= now);
       data.sort((a, b) => parseISO(a.datetime) - parseISO(b.datetime));
       setAppointments(data);
