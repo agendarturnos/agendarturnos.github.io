@@ -15,44 +15,6 @@ const mpClient = new MercadoPagoConfig({
 });
 const mpCustomer = new Customer(mpClient);
 
-exports.notifyAppointmentCreated = functions.firestore
-  .document("appointments/{id}")
-  .onCreate(async (snap) => {
-    const a = snap.data();
-    if (!a) return null;
-    const dt = a.datetime.toDate();
-    const fmt = dt.toLocaleString("es-AR", {
-      weekday: "long",
-      day: "numeric",
-      month: "long",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-    const messages = [];
-    if (a.clientEmail) {
-      messages.push({
-        to: a.clientEmail,
-        from: "no-reply@tusalon.com",
-        subject: "Confirmación de turno",
-        text: `Has reservado ${a.serviceName} con ${a.stylistName} el ${fmt}.`,
-        html: `<p>Has reservado <strong>${a.serviceName}</strong> con <strong>${a.stylistName}</strong> el <strong>${fmt}</strong>.</p>`,
-      });
-    }
-    if (a.stylistEmail) {
-      messages.push({
-        to: a.stylistEmail,
-        from: "no-reply@tusalon.com",
-        subject: "Nuevo turno reservado",
-        text: `${a.clientEmail} reservó ${a.serviceName} el ${fmt}.`,
-        html: `<p><strong>${a.clientEmail}</strong> reservó <strong>${a.serviceName}</strong> el <strong>${fmt}</strong>.</p>`,
-      });
-    }
-    if (messages.length > 0) {
-      await sgMail.send(messages);
-    }
-    return null;
-  });
-
 exports.sendAppointmentReminders = functions.pubsub
   .schedule("every 60 minutes")
   .onRun(async () => {

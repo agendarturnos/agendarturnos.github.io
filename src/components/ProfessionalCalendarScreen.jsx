@@ -1,7 +1,7 @@
 // src/components/ProfessionalCalendarScreen.jsx
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { collection, getDocs, doc, runTransaction, Timestamp } from 'firebase/firestore';
+import { collection, getDocs, doc, runTransaction } from 'firebase/firestore';
 import { db, auth } from '../firebaseConfig';
 import {
   format,
@@ -43,7 +43,7 @@ export default function ProfessionalCalendarScreen() {
         setAppointments(
           snap.docs.map(d => ({
             id: d.id,
-            datetime: d.data().datetime.toDate().toISOString(),
+            datetime: d.data().datetime,
             duration: d.data().duration || service.duration,
             stylistId: d.data().stylistId
           }))
@@ -174,15 +174,13 @@ export default function ProfessionalCalendarScreen() {
           transaction.set(apptRef, {
             stylistId: stylist.id,
             stylistName: stylist.name,
-            stylistEmail: stylist.email || '',
             serviceId: service.id,
             serviceName: service.name,
             clientId: auth.currentUser.uid,
             clientEmail: auth.currentUser.email,
-            datetime: Timestamp.fromDate(dt),
+            datetime: dt.toISOString(),
             duration: service.duration,
             companyId: companyId,
-            reminderSent: false,
           });
         });
         alert('Turno reservado correctamente.');
