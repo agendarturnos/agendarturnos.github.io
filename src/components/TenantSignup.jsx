@@ -109,6 +109,8 @@ export default function TenantSignup() {
       setMessage("Registro exitoso");
       setIsError(false);
 
+      localStorage.setItem('showTutorial', 'true');
+
       // Redirigir tras 5s
       const newSlug = cleanSlug;
       setTimeout(() => navigate(`/${newSlug}`), 3000);
