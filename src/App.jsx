@@ -1,5 +1,5 @@
 // src/App.jsx
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   BrowserRouter as Router,
   Routes,
@@ -52,6 +52,16 @@ function AppContent() {
   const canAccessAdmin =
     (profile?.isAdmin || profile?.isProfesional) &&
     profile?.companyId === companyId;
+
+  useEffect(() => {
+    if (localStorage.getItem('showTutorial') === 'true') {
+      window.open(
+        'https://drive.google.com/file/d/12pJCHASdQmPoPAl_phxo4XU8lD6KYMad/view?usp=drive_link',
+        '_blank'
+      );
+      localStorage.removeItem('showTutorial');
+    }
+  }, []);
 
   return (
     <>
